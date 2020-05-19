@@ -1,4 +1,4 @@
-# Windows Auto Configuration(WAC software)
+# WAC software
 
 # Library
 
@@ -155,6 +155,7 @@ def reboot():
 
 def web():
     webbrowser.open('http://mimtech.ir/mag/disable-win10-update/')
+    webbrowser.open('https://github.com/mimtechir/wac/blob/master/WAC.py')
 
 
 # Click
