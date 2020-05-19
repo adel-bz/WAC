@@ -1,4 +1,4 @@
-# WAC software
+# Windows Auto Configuration(WAC software)
 
 # Library
 
