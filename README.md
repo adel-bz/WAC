@@ -1,1 +1,1 @@
-# This project is for disable/enable windows update and windows defender
+# This project is for disabling/enabling windows update and windows defender
