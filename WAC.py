@@ -59,7 +59,7 @@ photo = PhotoImage(file=r"wac.png")
 root.iconphoto(False, photo)
 
 
-# Add image for help and contact us
+# Add photo for help and contact us
 
 helpimage = PhotoImage(file=r"help image.png")
 contactusimage = PhotoImage(file=r"contact us.png")
@@ -158,7 +158,7 @@ def web():
     webbrowser.open('https://github.com/mimtechir/wac/blob/master/WAC.py')
 
 
-# Click
+# Buttons
 
 Help = tk.Button(text='Help', width=14, command=help_text, bg='white', fg='#001322', bd=2, relief=FLAT,
                  font=('SegoeUI', 9))
@@ -168,7 +168,7 @@ updated = tk.Button(text='Disable Update', width=14, command=update_disable, bg=
                     relief=FLAT, font=('SegoeUI', 9))
 canvas1.create_window(131, 140, window=updated)
 
-updatee = tk.Button(text='Enable Disable', width=14, command=update_enable, bg='white', bd=2, fg='#001322', relief=FLAT,
+update = tk.Button(text='Enable Disable', width=14, command=update_enable, bg='white', bd=2, fg='#001322', relief=FLAT,
                     font=('SegoeUI', 9))
 canvas1.create_window(131, 181, window=updatee)
 
