@@ -1,99 +1,73 @@
-# WAC software
+# WAC Software
 
-# Library
-
-import tkinter as tk
+# Librarys
 from winreg import *
 import os
 from tkinter import *
 from PIL import ImageTk
-import sys
-import win32com.shell.shell as shell
+import customtkinter
 import webbrowser
 
+# Constants for image paths
+WINUPDATE_DIS_IMAGE_PATH = "assets/winupdate_dis_image.png"
+WINUPDATE_ENA_IMAGE_PATH = "assets/winupdate_ena_image.png"
+DEFENDER_DIS_IMAGE_PATH = "assets/defender_dis_image.png"
+DEFENDER_ENA_IMAGE_PATH = "assets/defender_ena_image.png"
+RESTART_IMAGE_PATH = "assets/restart.png"
+WEBSITE_IMAGE_PATH = "assets/website.png"
+GITHUB_IMAGE_PATH = "assets/github.png"
+HELP_IMAGE_PATH = "assets/help.png"
 
-# Admin access
+# Buttons oprations result texts
+### Successful ###
+successful_texts = {
+    "winupdate_dis_operation": "Windows Update service was disabled.\nPlease reboot your system.",
+    "winupdate_ena_operation": "Windows Update service was enabled.\nPlease reboot your system.",
+    "defender_dis_operation": "Windows Defender was disabled.\nPlease reboot your system.",
+    "defender_ena_operation": "Windows Defender was enabled.\nPlease reboot your system."
+}
 
-ASADMIN = 'asadmin'
-
-if sys.argv[-1] != ASADMIN:
-    script = os.path.abspath(sys.argv[0])
-    params = ' '.join([script] + sys.argv[1:] + [ASADMIN])
-    shell.ShellExecuteEx(lpVerb='runas', lpFile=sys.executable, lpParameters=params)
-    sys.exit(0)
-with open("somefilename.txt", "w") as out:
-    print(out, "i am root")
-
-
-# Texts
-
-text_updated = 'Your system windows update is disable, Please reboot your system.'
-text_updatee = 'Your system windows update is enable, Please reboot your system.'
-text_defenderd = 'Your system windows defender is disable, Please reboot your system.'
-text_defendere = 'Your system windows defender is enable, Please reboot your system.'
-text_help = "This is a software for help you.\n" \
-            "\n"\
-            "Disable Update: for disable windows 10 automatic update.\n"\
-            "Enable Update: for enable windows 10 automatic update.\n"\
-            "Disable Defender: for disable windows defender.\n"\
-            "Enable Defender: for disable windows enable.\n"\
-            "Reboot: After each of the above operations,\n you need to reboot your system.\n" \
-            "This is a shortcut button for this task."
-text_contactus = "Contact information MIMTech\n"\
-            "\n"\
-            "Email: Support@mimtech.ir\n" \
-            "Phone: +98011-42260276"
+### Unsuccessful ###
+unsuccessful_texts = {
+    "winupdate_dis_operation": "Disabling Windows Update was unsuccessful.",
+    "winupdate_ena_operation": "Enabling Windows Update was unsuccessful.",
+    "defender_dis_operation": "Disabling Windows Defender was unsuccessful",
+    "defender_ena_operation": "Enabling Windows Defender was unsuccessful"
+}
 
 # GUI
+### Creating a window ###
+root= customtkinter.CTk(fg_color="#1C3754") 
+ 
+### Title ###
+title_text = "WAC"
+root.title('{: >91}'.format(title_text)) 
 
-root = tk.Tk()
-root.title("WAC")
-
-canvas1 = tk.Canvas(root, width=680, height=500)
-canvas1.pack(expand=YES, fill=BOTH)
-
-image = ImageTk.PhotoImage(file="WACBack.png")
-canvas1.create_image(1, 1, image=image, anchor=NW)
-
-photo = PhotoImage(file=r"wac.png")
-root.iconphoto(False, photo)
-
-
-# Add photo for help and contact us
-
-helpimage = PhotoImage(file=r"help image.png")
-contactusimage = PhotoImage(file=r"contact us.png")
-
-
-# Disable maximize button
-
+### Set icon & Disabling resizable ###
 root.resizable(0, 0)
+root.iconbitmap("assets/WAC-icon.ico")
 
+### The window configs & Background ###
+bg = ImageTk.PhotoImage(file="C:/Users/Adel/Desktop/WAC Newest Version/assets/WACBack.png")
+my_Canvas = Canvas(root, width=645, height=500)
+my_Canvas.pack(expand=True, fill=BOTH)
+my_Canvas.create_image(0, 0, image=bg ,anchor=NW)
 
-# Function/Operation
+### The Lable configs for showing results text ###
+label = customtkinter.CTkLabel(root, text="")
+my_Canvas.create_window(420, 225, window=label)
 
-def text(x):
-    label1 = tk.Label(root, text=x, fg='#FAFF75', bg='#001322', bd=2, relief=FLAT, width=58,  font=('SegoeUI', 8))
-    canvas1.create_window(409, 432, window=label1)
-
-
-def help_text():
-    label1 = tk.Label(root, text=text_help, image=helpimage, anchor=CENTER, bd=2, relief=FLAT, fg='white',
-                      bg="#046272", width=320,
-                      height=213,
-                      font=('SegoeUI', 8))
-    canvas1.create_window(409, 199, window=label1)
-
-
-def contact_us():
-    label1 = tk.Label(root, text=text_contactus, image=contactusimage, anchor=CENTER, bd=2, relief=FLAT, fg='white',
-                      bg="#046272", width=320,
-                      height=65,
-                      font=('SegoeUI', 8))
-    canvas1.create_window(408, 366, window=label1)
-
-
-def update_disable():
+def display_result(result_text):
+    global label
+    label.destroy()
+    label = customtkinter.CTkLabel(root, text=result_text, fg_color="transparent", bg_color='transparent',
+                                  anchor=NW, font=('Poppins', 11, "normal"))
+    my_Canvas.create_window(420, 225, window=label)
+    
+# Buttons Operation
+### Windows 'update disabling' button operation: 
+## Disables Windows Update with appropriate registry key settings and shows the result. ###
+def winupdate_dis_operation():
     # Step1
     key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows', 0, KEY_ALL_ACCESS)
     CreateKey(key, "WindowsUpdate")
@@ -107,12 +81,14 @@ def update_disable():
         key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU', 0, KEY_ALL_ACCESS)
         SetValueEx(key, "AUOptions", 0, REG_DWORD, 0x00000002)
         CloseKey(key)
-        text(text_updated)
-    except:
-        print("Disabling the update did not work.")
+        display_result(successful_texts["winupdate_dis_operation"])
+    except Exception:
+        CloseKey(key)
+        display_result(unsuccessful_texts["winupdate_dis_operation"])
 
-
-def update_enable():
+### Windows 'update enabling' button operation:
+## Enables Windows Update with the relevant registry key values and displays the result. ###
+def winupdate_ena_operation():
     # Step1
     key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows', 0, KEY_ALL_ACCESS)
     CreateKey(key, "WindowsUpdate")
@@ -126,70 +102,97 @@ def update_enable():
         key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU', 0, KEY_ALL_ACCESS)
         SetValueEx(key, "AUOptions", 0, REG_DWORD, 0x00000000)
         CloseKey(key)
-        text(text_updatee)
-    except:
-        print("Activating the update did not work.")
+        display_result(successful_texts["winupdate_ena_operation"])
+    except Exception:
+        CloseKey(key)
+        display_result(unsuccessful_texts["winupdate_ena_operation"])
 
-
-def defender_disable():
+### Windows 'defender disabling' button operation:
+## Disables Windows Defender by modifying the registry, and the result is shown. ###
+def defender_dis_operation():
     try:
         key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows Defender', 0, KEY_ALL_ACCESS)
         SetValueEx(key, "DisableAntiSpyware", 0, REG_DWORD, 0x00000001)
-        text(text_defenderd)
-    except:
-        print("Disabling the defender did not work.")
+        CloseKey(key)
+        display_result(successful_texts["defender_dis_operation"])
+    except Exception:
+        CloseKey(key)
+        display_result(unsuccessful_texts["defender_dis_operation"])
 
-
-def defender_enable():
+### Windows 'defender enabling' button operation: 
+## Enables Windows Defender through registry changes, and the outcome is displayed. ###
+def defender_ena_operation():
     try:
         key = OpenKey(HKEY_LOCAL_MACHINE, r'SOFTWARE\Policies\Microsoft\Windows Defender', 0, KEY_ALL_ACCESS)
         SetValueEx(key, "DisableAntiSpyware", 0, REG_DWORD, 0x00000000)
-        text(text_defendere)
-    except:
-        print("Activating the defender did not work.")
+        CloseKey(key)
+        display_result(successful_texts["defender_ena_operation"])
+    except Exception:
+        CloseKey(key)
+        display_result(unsuccessful_texts["defender_ena_operation"])
 
+### Restart button operation: Initiates a system restart with a delay of 2 second. ###
+def restart_operation():
+    os.system("shutdown /r /t 2")
 
-def reboot():
-    os.system("shutdown /r /t 1")
+### Website button operation: Opens a web link to an external resource about disabling Windows 10 update. ###
+def website_operation():
+    webbrowser.open('https://mimtech.ir/mag/disable-win10-update/')
 
+### Github button operation: Opens a web link to the GitHub repository for WAC. ###
+def github_operation():
+    webbrowser.open('https://github.com/adel-bz/WAC')
 
-def web():
-    webbrowser.open('http://mimtech.ir/mag/disable-win10-update/')
-    webbrowser.open('https://github.com/mimtechir/wac/blob/master/WAC.py')
+### Help button operation: Opens a web link for GitHub support. ###
+def help_operation():
+    webbrowser.open('https://github.com/adel-bz/WAC#buttons')
 
+# Buttons: 
+## In this section, buttons are created for various operations in the Graphical User Interface (GUI) of the WAC Software. 
+## Each button is associated with an image and a specific operation, 
+## and clicking the button triggers the corresponding action. 
+## The buttons are positioned on the canvas, and their positions are determined using coordinates. ##
 
-# Buttons
+# Buttons creation
+def create_button(image_path, command):
+    image = ImageTk.PhotoImage(file=image_path)
+    button = customtkinter.CTkButton(master=root, image=image, text="",
+                                     fg_color="transparent", bg_color="transparent",
+                                     hover_color="#4E749F", corner_radius=0, border_width=1,
+                                     border_color="#1C3754", command=command)
+    return button
 
-Help = tk.Button(text='Help', width=14, command=help_text, bg='white', fg='#001322', bd=2, relief=FLAT,
-                 font=('SegoeUI', 9))
-canvas1.create_window(131, 99, window=Help)
+### Disabling update button ###
+winupdate_dis_button = create_button(WINUPDATE_DIS_IMAGE_PATH, winupdate_dis_operation)
+my_Canvas.create_window(50, 58, window=winupdate_dis_button ,anchor=NW)
 
-updated = tk.Button(text='Disable Update', width=14, command=update_disable, bg='white', bd=2, fg='#001322',
-                    relief=FLAT, font=('SegoeUI', 9))
-canvas1.create_window(131, 140, window=updated)
+### Enabling update button ###
+winupdate_ena_button = create_button(WINUPDATE_ENA_IMAGE_PATH, winupdate_ena_operation)
+my_Canvas.create_window(50, 107, window=winupdate_ena_button ,anchor=NW)
 
-update = tk.Button(text='Enable Disable', width=14, command=update_enable, bg='white', bd=2, fg='#001322', relief=FLAT,
-                    font=('SegoeUI', 9))
-canvas1.create_window(131, 181, window=updatee)
+### Disabling defender button ###
+defender_dis_button = create_button(DEFENDER_DIS_IMAGE_PATH, defender_dis_operation)
+my_Canvas.create_window(50, 156, window=defender_dis_button ,anchor=NW)
 
-defenderd = tk.Button(text='Disable Defender', width=14, command=defender_disable, bg='white', bd=2, fg='#001322',
-                      relief=FLAT, font=('SegoeUI', 9))
-canvas1.create_window(131, 223, window=defenderd)
+### Enabling defender button ###
+defender_ena_button = create_button(DEFENDER_ENA_IMAGE_PATH, defender_ena_operation)
+my_Canvas.create_window(50, 205, window=defender_ena_button ,anchor=NW)
 
-defendere = tk.Button(text='Enable Defender', width=14, command=defender_enable, bg='white', bd=2, fg='#001322',
-                      relief=FLAT, font=('SegoeUI', 9))
-canvas1.create_window(131, 265, window=defendere)
+### Restart button ###
+restart_button = create_button(RESTART_IMAGE_PATH, restart_operation)
+my_Canvas.create_window(50, 254, window=restart_button ,anchor=NW)
 
-reboot = tk.Button(text='Reboot', width=14, command=reboot, bg='white', bd=2, fg='#001322', relief=FLAT,
-                   font=('SegoeUI', 9))
-canvas1.create_window(131, 308, window=reboot)
+### Website button ###
+website_button = create_button(WEBSITE_IMAGE_PATH, website_operation)
+my_Canvas.create_window(50, 303, window=website_button ,anchor=NW)
 
-Contactus = tk.Button(text='Contact US', width=14, command=contact_us, bg='white', bd=2, fg='#001322', relief=FLAT,
-                      font=('SegoeUI', 9))
-canvas1.create_window(131, 350, window=Contactus)
+### Github button ###
+github_button = create_button(GITHUB_IMAGE_PATH, github_operation)
+my_Canvas.create_window(50, 352, window=github_button ,anchor=NW)
 
-web_page = tk.Button(text='Web page', width=14, command=web, bg='white', bd=2, fg='#001322', relief=FLAT,
-                     font=('SegoeUI', 9))
-canvas1.create_window(131, 391, window=web_page)
+### Help button ###
+help_button = create_button(HELP_IMAGE_PATH, help_operation)
+my_Canvas.create_window(50, 401, window=help_button ,anchor=NW)
 
+# Loop Window
 root.mainloop()
