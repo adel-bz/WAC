@@ -48,7 +48,7 @@ root.resizable(0, 0)
 root.iconbitmap("assets/WAC-icon.ico")
 
 ### The window configs & Background ###
-bg = ImageTk.PhotoImage(file="C:/Users/Adel/Desktop/WAC Newest Version/assets/WACBack.png")
+bg = ImageTk.PhotoImage(file="assets/WACBack.png")
 my_Canvas = Canvas(root, width=645, height=500)
 my_Canvas.pack(expand=True, fill=BOTH)
 my_Canvas.create_image(0, 0, image=bg ,anchor=NW)
@@ -145,7 +145,7 @@ def github_operation():
 
 ### Help button operation: Opens a web link for GitHub support. ###
 def help_operation():
-    webbrowser.open('https://github.com/adel-bz/WAC#buttons')
+    webbrowser.open('https://github.com/adel-bz/WAC#buttons-and-operations')
 
 # Buttons: 
 ## In this section, buttons are created for various operations in the Graphical User Interface (GUI) of the WAC Software. 
