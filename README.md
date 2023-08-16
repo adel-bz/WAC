@@ -2,7 +2,8 @@
 The WAC (Windows Assistant Controller) software is a utility designed for controlling various settings of the Windows operating system. This document provides an overview and explanation of the code structure and functionality of the WAC software. 
 The software is built using Python and leverages several libraries and modules to interact with the Windows Registry, create a graphical user interface (GUI), and perform various system operations.
 
-![Screenshot from 2023-08-08 13-11-45](https://github.com/adel-bz/WAC/assets/45201934/fb8800e7-fd16-4fd6-afe2-8d7a231b84e9)
+![Screenshot from 2023-08-16 10-30-25](https://github.com/adel-bz/WAC/assets/45201934/7d724078-74f5-4139-8cbc-24571075ce8b)
+
 
 
 # Code Structure
