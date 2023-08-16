@@ -45,7 +45,7 @@ root.title('{: >91}'.format(title_text))
 
 ### Set icon & Disabling resizable ###
 root.resizable(0, 0)
-root.iconbitmap("assets/WAC-icon.ico")
+root.iconbitmap("assets/icon.ico")
 
 ### The window configs & Background ###
 bg = ImageTk.PhotoImage(file="assets/WACBack.png")
