@@ -54,6 +54,8 @@ The software offers several buttons, each associated with a specific operation. 
 # Usage
 The user interface is designed to provide an intuitive experience for users. When a button is clicked, the corresponding operation is performed, and the result of the operation is displayed in a label on the GUI. Successful operations show success messages, while unsuccessful operations display corresponding error messages.
 
+You can download WAC from releases.
+
 # Libraries Documentations
 
 https://docs.python.org/3/library/winreg.html
