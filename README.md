@@ -70,3 +70,21 @@ https://docs.python.org/3/library/webbrowser.html
 
 # Conclusion
 The WAC software offers a user-friendly way to control various settings of the Windows operating system. It provides operations to disable or enable Windows Update and Windows Defender, along with other functionalities. The graphical user interface makes it easy for users to interact with the software and receive feedback on their actions. This document provides an overview of the code structure and functionality of the WAC software.
+
+# Contributing
+We welcome contributions from the community to improve the WAC. To contribute:
+
+1. Fork the repository.
+
+2. Create a new branch for your feature/fix:
+```
+git checkout -b feature-name
+```
+3. Commit your changes and push to your forked repository:
+```
+git commit -m "Add a descriptive commit message"
+git push origin feature-name
+```
+4. Create a pull request. Your changes will be reviewed, and once approved, they will be merged into the main branch.
+
+Please ensure your code adheres to the project's coding standards.
